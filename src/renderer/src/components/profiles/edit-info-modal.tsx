@@ -203,26 +203,26 @@ const EditInfoModal: React.FC<Props> = (props) => {
                   </SettingItem>
                 </>
               )}
+              <SettingItem title={t('profiles.editInfo.updateTimeout')}>
+                <Input
+                  size="sm"
+                  type="text"
+                  className={cn(inputWidth)}
+                  value={values.updateTimeout?.toString() ?? ''}
+                  onValueChange={(v) => {
+                    if (v === '') {
+                      setValues({ ...values, updateTimeout: undefined })
+                      return
+                    }
+                    if (/^\d+$/.test(v)) {
+                      setValues({ ...values, updateTimeout: parseInt(v, 10) })
+                    }
+                  }}
+                  placeholder={t('profiles.editInfo.updateTimeoutPlaceholder')}
+                />
+              </SettingItem>
             </>
           )}
-          <SettingItem title={t('profiles.editInfo.updateTimeout')}>
-            <Input
-              size="sm"
-              type="text"
-              className={cn(inputWidth)}
-              value={values.updateTimeout?.toString() ?? ''}
-              onValueChange={(v) => {
-                if (v === '') {
-                  setValues({ ...values, updateTimeout: undefined })
-                  return
-                }
-                if (/^\d+$/.test(v)) {
-                  setValues({ ...values, updateTimeout: parseInt(v, 10) })
-                }
-              }}
-              placeholder={t('profiles.editInfo.updateTimeoutPlaceholder')}
-            />
-          </SettingItem>
           <SettingItem title={t('profiles.editInfo.override.title')}>
             <div>
               {overrideItems

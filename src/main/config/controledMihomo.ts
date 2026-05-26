@@ -3,7 +3,7 @@ import { existsSync } from 'fs'
 import { controledMihomoConfigPath } from '../utils/dirs'
 import { parse, stringify } from '../utils/yaml'
 import { generateProfile } from '../core/factory'
-import { patchMihomoConfig } from '../core/mihomoApi'
+import { patchMihomoConfig, startMihomoLogs } from '../core/mihomoApi'
 import { defaultControledMihomoConfig } from '../utils/template'
 import { deepMerge } from '../utils/merge'
 import { createLogger } from '../utils/logger'
@@ -113,6 +113,15 @@ export async function patchControledMihomoConfig(patch: Partial<IMihomoConfig>):
         'Hot patch /configs failed, changes will apply on next restart',
         error
       )
+    }
+
+    // log-level 改变时重连日志 WebSocket，使新等级立刻生效
+    if (patch['log-level']) {
+      try {
+        await startMihomoLogs()
+      } catch (error) {
+        controledMihomoLogger.warn('Failed to restart log stream after log-level change', error)
+      }
     }
   })
   await controledMihomoWriteQueue
